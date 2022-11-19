@@ -10,31 +10,21 @@ package ucrssur;
  * @author Kevin Sibaja
  * @author Yordany Navarro Hernandez
  */
-public class Person {
+public class Student {
 
     private String email;
     private String gender;
-    private String ID;
+    private String IdStudent;
     private String name;
     private String residence;
- /**
-  * Constructor vacio 
-  */
-    public Person() {
+
+    public Student() {
     }
-   /**
-    * constructores contiene todos los atributos necesarios para utilizarlos en 
-    * el codigo. 
-    * @param email
-    * @param gender
-    * @param ID
-    * @param name
-    * @param residence 
-    */
-    public Person(String email, String gender, String ID, String name, String residence) {
+
+    public Student(String IdStudent, String name,String gender,String residence, String email) {
         this.email = email;
         this.gender = gender;
-        this.ID = ID;
+        this.IdStudent = IdStudent;
         this.name = name;
         this.residence = residence;
     }
@@ -68,17 +58,17 @@ public class Person {
     }
 
     /**
-     * @return the ID
+     * @return the IdStudent
      */
-    public String getID() {
-        return ID;
+    public String getIdStudent() {
+        return IdStudent;
     }
 
     /**
-     * @param ID the ID to set
+     * @param IdStudent the IdStudent to set
      */
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setIdStudent(String IdStudent) {
+        this.IdStudent = IdStudent;
     }
 
     /**
@@ -111,8 +101,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" + "email=" + email + ", gender=" + gender + ", ID=" + ID + ", name=" + name + ", residence=" + residence + '}';
+        return "Student{" + "email=" + email + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
     }
-    
-
+  
 }
