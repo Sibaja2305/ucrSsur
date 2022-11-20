@@ -16,6 +16,9 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
@@ -23,7 +26,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.swing.JOptionPane;
 
 public class UcrSsur {
@@ -86,7 +91,7 @@ public class UcrSsur {
                 break;
             case 6:
                 createEmail();
-                sendEmail ();
+                
 
                 System.out.println("-------------------------------------------");
                 menu(archivo);
@@ -171,35 +176,59 @@ public class UcrSsur {
     }
 
     public static void  createEmail() throws IOException {
-     System.out.println("email a que quiere enviar");
-     emailTo=br.readLine();
-     System.out.println("Asunto del correo");
-     subject= br.readLine();
-     System.out.println("Mensaje");
-     content = br.readLine();
-     
-     properties.put("mail.smtp.host","smtp.gmail.com");
-     properties.put("mail.smtp.ssl.trust","smtp.gmail.com");
-     properties.setProperty("mail.smtp.starttls.enable","true");
-     properties.setProperty("mail.smtp.port","587");
-     properties.setProperty("mail.smtp.user",emailFrom);
-     properties.setProperty("mail.smtp.ssl.protocols","TLSv1.2");
-     properties.setProperty("mail.smtp.auth","true");
-     
-     session=Session.getDefaultInstance(properties);
-     
-     
+        
         try {
-            mimeMessage=new MimeMessage(session);
-            mimeMessage.setFrom(new InternetAddress(emailFrom));
-             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
-             mimeMessage.setSubject(subject);
-             mimeMessage.setText(content, "ISO-8859-1", "html");
-        } catch (AddressException ex) {
-            Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
+            
+            System.out.println("email a que quiere enviar");
+            emailTo=br.readLine();
+            System.out.println("Asunto del correo");
+            subject= br.readLine();
+            System.out.println("Mensaje");
+            content = br.readLine();
+            properties.put("mail.smtp.host","smtp.gmail.com");
+            properties.put("mail.smtp.ssl.trust","smtp.gmail.com");
+            properties.setProperty("mail.smtp.starttls.enable","true");
+            properties.setProperty("mail.smtp.port","587");
+            properties.setProperty("mail.smtp.user",emailFrom);
+            properties.setProperty("mail.smtp.ssl.protocols","TLSv1.2");
+            properties.setProperty("mail.smtp.auth","true");
+            
+            session=Session.getDefaultInstance(properties);
+            BodyPart texto = new MimeBodyPart();
+            try {
+                texto.setText("mensaje");
+            } catch (MessagingException ex) {
+                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            BodyPart adjunto=new MimeBodyPart ();
+            
+            adjunto.setDataHandler(new DataHandler(new FileDataSource("C:\\Users\\Hp EliteBook\\OneDrive\\Documentos\\Manual de usuario.txt")));
+            adjunto.setFileName("Manual de usuario.txt");
+            MimeMultipart m=new MimeMultipart();
+            m.addBodyPart(texto);
+            m.addBodyPart(adjunto);
+            
+            
+            
+            try {
+                mimeMessage=new MimeMessage(session);
+                mimeMessage.setFrom(new InternetAddress(emailFrom));
+                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
+                mimeMessage.setSubject(subject);
+                mimeMessage.setText(content, "ISO-8859-1", "html");
+            } catch (AddressException ex) {
+                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (MessagingException ex) {
+                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            sendEmail();
+            
+            
+            
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
      
      
     }
@@ -216,4 +245,5 @@ public class UcrSsur {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
 }
