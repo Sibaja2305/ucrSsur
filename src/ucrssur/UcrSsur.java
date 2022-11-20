@@ -71,8 +71,6 @@ public class UcrSsur {
                 break;
             case 3:
                 System.out.println("-------------------------------------------");
-                seeStudent();
-                System.out.println("-------------------------------------------");
                 menu(archivo);
                 System.out.println("-------------------------------------------");
                 break;
@@ -118,6 +116,7 @@ public class UcrSsur {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             System.out.println("Se subio el registro: "
                     + chooser.getSelectedFile().getName());
+            System.out.println("-------------------------------------------");
         }
         menu(chooser.getSelectedFile());
     }
@@ -128,13 +127,14 @@ public class UcrSsur {
         String strCurrentLine;
         int i = 0;
         while ((strCurrentLine = objReader.readLine()) != null) {
-            // System.out.println("strCurrentLine: "+strCurrentLine);
+            
             String datos[] = strCurrentLine.split(",");
             Student student = new Student(datos[0], datos[1], datos[2], datos[3], datos[4]);
             listStudents = newVector(student, i);
-            System.out.println("vec: " + listStudents[i].getName());
+//           
             i++;
         }
+         seeStudent();
     }
 
     private static Student[] newVector(Student student, int i) {
@@ -151,7 +151,7 @@ public class UcrSsur {
 
     private static void seeStudent() {
         for (int i = 0; i < listStudents.length; i++) {
-            System.out.println("Estudiante: " + listStudents[i].getGender());
+            System.out.println("Estudiante: " + listStudents[i].getName());
         }
     }
 
