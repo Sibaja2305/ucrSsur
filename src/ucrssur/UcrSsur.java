@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 
 public class UcrSsur {
 
+    static JFileChooser chooser = new JFileChooser();
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static Student listStudents[];
     private static String emailFrom = "kevinsibajah@gmail.com";
@@ -40,7 +41,7 @@ public class UcrSsur {
     private static String emailTo;
     private static String subject;
     private static String content;
-     private static Properties properties = new Properties();
+    private static Properties properties = new Properties();
     private static Session session;
     private static MimeMessage mimeMessage;
 
@@ -64,17 +65,16 @@ public class UcrSsur {
                 System.out.println("-------------------------------------------");
                 listRegister(archivo);
                 System.out.println("-------------------------------------------");
-
                 break;
             case 2:
                 System.out.println("-------------------------------------------");
-                showFile(archivo);
+                seeStudent();
                 System.out.println("-------------------------------------------");
                 menu(archivo);
                 System.out.println("-------------------------------------------");
-
                 break;
             case 3:
+                editStudent();
                 System.out.println("-------------------------------------------");
                 menu(archivo);
                 System.out.println("-------------------------------------------");
@@ -91,8 +91,6 @@ public class UcrSsur {
                 break;
             case 6:
                 createEmail();
-                
-
                 System.out.println("-------------------------------------------");
                 menu(archivo);
                 System.out.println("-------------------------------------------");
@@ -108,14 +106,14 @@ public class UcrSsur {
 
                 break;
             default:
-                System.out.println("opcion invalida, por favor digite");
+                System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
                 menu(archivo);
                 break;
         }
     }
 
     public static void listRegister(File archivo) throws IOException {
-        JFileChooser chooser = new JFileChooser();
+
         Component parent = null;
         int returnVal = chooser.showOpenDialog(parent);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -123,26 +121,26 @@ public class UcrSsur {
                     + chooser.getSelectedFile().getName());
             System.out.println("-------------------------------------------");
         }
-        menu(chooser.getSelectedFile());
+        showFile(chooser.getSelectedFile());
     }
 
     public static void showFile(File archivo) throws IOException {
+
         BufferedReader objReader = null;
         objReader = new BufferedReader(new FileReader(archivo.getAbsolutePath()));
         String strCurrentLine;
         int i = 0;
         while ((strCurrentLine = objReader.readLine()) != null) {
-            
             String datos[] = strCurrentLine.split(",");
             Student student = new Student(datos[0], datos[1], datos[2], datos[3], datos[4]);
             listStudents = newVector(student, i);
-//           
             i++;
         }
-         seeStudent();
+        menu(archivo);
     }
 
     private static Student[] newVector(Student student, int i) {
+
         Student listStudend[] = new Student[i + 1];
         listStudend[i] = student;
         if (i >= 1) {
@@ -155,12 +153,14 @@ public class UcrSsur {
     }
 
     private static void seeStudent() {
+
         for (int i = 0; i < listStudents.length; i++) {
             System.out.println("Estudiante: " + listStudents[i].getName());
         }
     }
 
     public static void readUserManual() {
+
         try {
             File myObj = new File("C:\\Users\\Hp EliteBook\\OneDrive\\Documentos\\Manual de usuario.txt");
             Scanner myReader = new Scanner(myObj);
@@ -175,43 +175,41 @@ public class UcrSsur {
         }
     }
 
-    public static void  createEmail() throws IOException {
-        
+    public static void createEmail() throws IOException {
+
         try {
-            
             System.out.println("email a que quiere enviar");
-            emailTo=br.readLine();
+            emailTo = br.readLine();
             System.out.println("Asunto del correo");
-            subject= br.readLine();
+            subject = br.readLine();
             System.out.println("Mensaje");
             content = br.readLine();
-            properties.put("mail.smtp.host","smtp.gmail.com");
-            properties.put("mail.smtp.ssl.trust","smtp.gmail.com");
-            properties.setProperty("mail.smtp.starttls.enable","true");
-            properties.setProperty("mail.smtp.port","587");
-            properties.setProperty("mail.smtp.user",emailFrom);
-            properties.setProperty("mail.smtp.ssl.protocols","TLSv1.2");
-            properties.setProperty("mail.smtp.auth","true");
-            
-            session=Session.getDefaultInstance(properties);
+
+            properties.put("mail.smtp.host", "smtp.gmail.com");
+            properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+            properties.setProperty("mail.smtp.starttls.enable", "true");
+            properties.setProperty("mail.smtp.port", "587");
+            properties.setProperty("mail.smtp.user", emailFrom);
+            properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+            properties.setProperty("mail.smtp.auth", "true");
+
+            session = Session.getDefaultInstance(properties);
             BodyPart texto = new MimeBodyPart();
             try {
                 texto.setText("mensaje");
             } catch (MessagingException ex) {
                 Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
             }
-            BodyPart adjunto=new MimeBodyPart ();
-            
+            BodyPart adjunto = new MimeBodyPart();
+
             adjunto.setDataHandler(new DataHandler(new FileDataSource("C:\\Users\\Hp EliteBook\\OneDrive\\Documentos\\Manual de usuario.txt")));
             adjunto.setFileName("Manual de usuario.txt");
-            MimeMultipart m=new MimeMultipart();
+            MimeMultipart m = new MimeMultipart();
             m.addBodyPart(texto);
             m.addBodyPart(adjunto);
-            
-            
-            
+
             try {
-                mimeMessage=new MimeMessage(session);
+                mimeMessage = new MimeMessage(session);
                 mimeMessage.setFrom(new InternetAddress(emailFrom));
                 mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
                 mimeMessage.setSubject(subject);
@@ -222,28 +220,56 @@ public class UcrSsur {
                 Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
             }
             sendEmail();
-            
-            
-            
+
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-     
-     
+
     }
-    public static void sendEmail(){
+
+    public static void sendEmail() {
+
         try {
-            Transport transport=session.getTransport("smtp");
+            Transport transport = session.getTransport("smtp");
             transport.connect(emailFrom, passwordFrom);
             transport.sendMessage(mimeMessage, mimeMessage.getRecipients(Message.RecipientType.TO));
             transport.close();
-            JOptionPane.showMessageDialog(null,"correo enviado");
+            JOptionPane.showMessageDialog(null, "correo enviado");
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
+
+    public static void editStudent() throws IOException {
+        boolean found=false;
+        System.out.println("-------------------------------------------");
+        System.out.println("Carnet del estudiante a editar: ");
+        String CompareCard = br.readLine();
+        for (int i = 0; i < listStudents.length; i++) {
+            if (CompareCard.equals(listStudents[i].getIdStudent())) {
+                found=true;
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo carnet: ");               
+                listStudents[i].setIdStudent(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nombre: ");             
+                listStudents[i].setName(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Sexo biologico: ");   
+                listStudents[i].setGender(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo lugar de residencia: ");
+                listStudents[i].setResidence(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo correo electronico: ");                
+                listStudents[i].setEmail(br.readLine());
+            } 
+        }
+        if (!found) {
+            System.out.println("-------------------------------------------");
+            System.out.println("El estudiante no fue encontrado");
+        }
+    }
 }
