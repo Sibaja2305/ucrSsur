@@ -214,17 +214,11 @@ public class UcrSsur {
             m.addBodyPart(texto);
             m.addBodyPart(adjunto);
 
-            
             mimeMessage.setFrom(new InternetAddress(emailFrom));
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
             mimeMessage.setSubject(subject);
             mimeMessage.setContent(m);
-
-            Transport transport = session.getTransport("smtp");
-            transport.connect(emailFrom, passwordFrom);
-            transport.sendMessage(mimeMessage, mimeMessage.getRecipients(Message.RecipientType.TO));
-            transport.close();
-            JOptionPane.showMessageDialog(null, "correo enviado");
+            sendEmail();
 
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
