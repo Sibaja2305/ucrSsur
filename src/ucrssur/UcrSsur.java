@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Properties;
@@ -47,10 +48,10 @@ public class UcrSsur {
     private static MimeMessage mimeMessage;
 
     public static void main(String[] args) throws IOException {
-        menu(null);
+        menu(null,null);
     }
 
-    public static void menu(File archivo) throws IOException {
+    public static void menu(File archivo,File h) throws IOException {
         System.out.println("1= Registrar lista de estudiantes\n2= Leer lista de estudiantes\n"
                 + "3= Editar lista estudiantes\n"
                 + "4= Borrar lista de estudiantes\n5= Crear grupos de la lista de estudiantes  \n"
@@ -71,38 +72,38 @@ public class UcrSsur {
                 System.out.println("-------------------------------------------");
                 seeStudent();
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 3:
                 editStudent();
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
 
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 5:
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 6:
-                createEmail();
+                email(h);
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 7:
                 System.out.println("-------------------------------------------");
                 readUserManual();
                 System.out.println("-------------------------------------------");
-                menu(archivo);
+                menu(archivo,null);
                 System.out.println("-------------------------------------------");
                 break;
             case 0:
@@ -114,7 +115,7 @@ public class UcrSsur {
                 break;
             default:
                 System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
-                menu(archivo);
+                menu(archivo,null);
                 break;
         }
     }
@@ -143,7 +144,7 @@ public class UcrSsur {
             listStudents = newVector(student, i);
             i++;
         }
-        menu(archivo);
+        menu(archivo,null);
     }
 
     private static Student[] newVector(Student student, int i) {
@@ -182,8 +183,8 @@ public class UcrSsur {
         }
     }
 
-    public static void createEmail() throws IOException {
-
+    public static void createEmail(File h) throws IOException {
+       
         System.out.println("email a que quiere enviar");
         emailTo = br.readLine();
         System.out.println("Asunto del correo");
@@ -208,8 +209,8 @@ public class UcrSsur {
 
             BodyPart adjunto = new MimeBodyPart();
 
-            adjunto.setDataHandler(new DataHandler(new FileDataSource("C:\\Users\\Hp EliteBook\\OneDrive\\Documentos\\Manual de usuario.txt")));
-            adjunto.setFileName("Manual de usuario.txt");
+            adjunto.setDataHandler(new DataHandler(new FileDataSource(h.getAbsolutePath())));
+            adjunto.setFileName(h.getName());
             MimeMultipart m = new MimeMultipart();
             m.addBodyPart(texto);
             m.addBodyPart(adjunto);
@@ -218,7 +219,7 @@ public class UcrSsur {
             mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
             mimeMessage.setSubject(subject);
             mimeMessage.setContent(m);
-            sendEmail();
+            sendEmail(h);
 
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
@@ -226,7 +227,7 @@ public class UcrSsur {
 
     }
 
-    public static void sendEmail() {
+    public static void sendEmail(File h) {
 
         try {
             Transport transport = session.getTransport("smtp");
@@ -271,5 +272,20 @@ public class UcrSsur {
             System.out.println("El estudiante no fue encontrado");
         }
     }
+    public static void email (File h) throws IOException{
+         Component pare = null;
+        int returnVal = chooser.showOpenDialog(pare);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            System.out.println("Se subio el registro: "
+                    + chooser.getSelectedFile().getName());
+            System.out.println("-------------------------------------------");
+        }
+        createEmail(chooser.getSelectedFile());
+        
+    }
+
+
+
+
 
 }
