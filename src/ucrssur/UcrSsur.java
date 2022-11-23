@@ -36,6 +36,7 @@ public class UcrSsur {
     static JFileChooser chooser = new JFileChooser();
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static Student listStudents[];
+    static Student aux[];
     private static String emailFrom = "kevinsibajah@gmail.com";
     private static String passwordFrom = "ccunjmdfqajcxeyi";
     private static String emailTo;
@@ -81,6 +82,8 @@ public class UcrSsur {
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
+
+                System.out.println("-------------------------------------------");
                 menu(archivo);
                 System.out.println("-------------------------------------------");
                 break;
@@ -103,6 +106,10 @@ public class UcrSsur {
                 System.out.println("-------------------------------------------");
                 break;
             case 0:
+
+                System.out.println("-------------------------------------------");
+                System.out.println("Feliz Navidad y prospero año nuevo");
+                System.out.println("-------------------------------------------");
 
                 break;
             default:
@@ -177,29 +184,28 @@ public class UcrSsur {
 
     public static void createEmail() throws IOException {
 
+        System.out.println("email a que quiere enviar");
+        emailTo = br.readLine();
+        System.out.println("Asunto del correo");
+        subject = br.readLine();
+        System.out.println("Mensaje");
+        content = br.readLine();
+
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.port", "587");
+        properties.setProperty("mail.smtp.user", emailFrom);
+        properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
+        properties.setProperty("mail.smtp.auth", "true");
+
+        session = Session.getDefaultInstance(properties);
+        mimeMessage = new MimeMessage(session);
         try {
-            System.out.println("email a que quiere enviar");
-            emailTo = br.readLine();
-            System.out.println("Asunto del correo");
-            subject = br.readLine();
-            System.out.println("Mensaje");
-            content = br.readLine();
-
-            properties.put("mail.smtp.host", "smtp.gmail.com");
-            properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-            properties.setProperty("mail.smtp.starttls.enable", "true");
-            properties.setProperty("mail.smtp.port", "587");
-            properties.setProperty("mail.smtp.user", emailFrom);
-            properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-            properties.setProperty("mail.smtp.auth", "true");
-
-            session = Session.getDefaultInstance(properties);
             BodyPart texto = new MimeBodyPart();
-            try {
-                texto.setText("mensaje");
-            } catch (MessagingException ex) {
-                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+            texto.setText(content);
+
             BodyPart adjunto = new MimeBodyPart();
 
             adjunto.setDataHandler(new DataHandler(new FileDataSource("C:\\Users\\Hp EliteBook\\OneDrive\\Documentos\\Manual de usuario.txt")));
@@ -208,18 +214,17 @@ public class UcrSsur {
             m.addBodyPart(texto);
             m.addBodyPart(adjunto);
 
-            try {
-                mimeMessage = new MimeMessage(session);
-                mimeMessage.setFrom(new InternetAddress(emailFrom));
-                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
-                mimeMessage.setSubject(subject);
-                mimeMessage.setText(content, "ISO-8859-1", "html");
-            } catch (AddressException ex) {
-                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (MessagingException ex) {
-                Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            sendEmail();
+            
+            mimeMessage.setFrom(new InternetAddress(emailFrom));
+            mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
+            mimeMessage.setSubject(subject);
+            mimeMessage.setContent(m);
+
+            Transport transport = session.getTransport("smtp");
+            transport.connect(emailFrom, passwordFrom);
+            transport.sendMessage(mimeMessage, mimeMessage.getRecipients(Message.RecipientType.TO));
+            transport.close();
+            JOptionPane.showMessageDialog(null, "correo enviado");
 
         } catch (MessagingException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
@@ -243,33 +248,34 @@ public class UcrSsur {
     }
 
     public static void editStudent() throws IOException {
-        boolean found=false;
+        boolean found = false;
         System.out.println("-------------------------------------------");
         System.out.println("Carnet del estudiante a editar: ");
         String CompareCard = br.readLine();
         for (int i = 0; i < listStudents.length; i++) {
             if (CompareCard.equals(listStudents[i].getIdStudent())) {
-                found=true;
+                found = true;
                 System.out.println("-------------------------------------------");
-                System.out.println("Nuevo carnet: ");               
+                System.out.println("Nuevo carnet: ");
                 listStudents[i].setIdStudent(br.readLine());
                 System.out.println("-------------------------------------------");
-                System.out.println("Nombre: ");             
+                System.out.println("Nombre: ");
                 listStudents[i].setName(br.readLine());
                 System.out.println("-------------------------------------------");
-                System.out.println("Sexo biologico: ");   
+                System.out.println("Sexo biologico: ");
                 listStudents[i].setGender(br.readLine());
                 System.out.println("-------------------------------------------");
                 System.out.println("Nuevo lugar de residencia: ");
                 listStudents[i].setResidence(br.readLine());
                 System.out.println("-------------------------------------------");
-                System.out.println("Nuevo correo electronico: ");                
+                System.out.println("Nuevo correo electronico: ");
                 listStudents[i].setEmail(br.readLine());
-            } 
+            }
         }
         if (!found) {
             System.out.println("-------------------------------------------");
             System.out.println("El estudiante no fue encontrado");
         }
     }
+
 }

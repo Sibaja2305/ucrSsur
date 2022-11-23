@@ -9,6 +9,7 @@ package ucrssur;
  * estudiantes de la UCRSSUR(.txt)
  * @author Kevin Sibaja
  * @author Yordany Navarro Hernandez
+ * @author Jonathan Alfaro
  */
 public class Student {
 
