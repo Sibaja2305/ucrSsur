@@ -48,10 +48,10 @@ public class UcrSsur {
     private static MimeMessage mimeMessage;
 
     public static void main(String[] args) throws IOException {
-        menu(null,null);
+        menu(null, null);
     }
 
-    public static void menu(File archivo,File h) throws IOException {
+    public static void menu(File archivo, File h) throws IOException {
         System.out.println("1= Registrar lista de estudiantes\n2= Leer lista de estudiantes\n"
                 + "3= Editar lista estudiantes\n"
                 + "4= Borrar lista de estudiantes\n5= Crear grupos de la lista de estudiantes  \n"
@@ -72,38 +72,39 @@ public class UcrSsur {
                 System.out.println("-------------------------------------------");
                 seeStudent();
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 3:
                 editStudent();
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
 
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 5:
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                createGroups();
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 6:
                 email(h);
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 7:
                 System.out.println("-------------------------------------------");
                 readUserManual();
                 System.out.println("-------------------------------------------");
-                menu(archivo,null);
+                menu(archivo, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 0:
@@ -115,7 +116,7 @@ public class UcrSsur {
                 break;
             default:
                 System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
-                menu(archivo,null);
+                menu(archivo, null);
                 break;
         }
     }
@@ -140,11 +141,11 @@ public class UcrSsur {
         int i = 0;
         while ((strCurrentLine = objReader.readLine()) != null) {
             String datos[] = strCurrentLine.split(",");
-            Student student = new Student(datos[0], datos[1], datos[2], datos[3], datos[4]);
+            Student student = new Student(datos[0], datos[1], datos[2], datos[3], datos[4], false);
             listStudents = newVector(student, i);
             i++;
         }
-        menu(archivo,null);
+        menu(archivo, null);
     }
 
     private static Student[] newVector(Student student, int i) {
@@ -184,13 +185,14 @@ public class UcrSsur {
     }
 
     public static void createEmail(File h) throws IOException {
-       
+
         System.out.println("email a que quiere enviar");
         emailTo = br.readLine();
         System.out.println("Asunto del correo");
         subject = br.readLine();
         System.out.println("Mensaje");
         content = br.readLine();
+        System.out.println("Espere un momento...");
 
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
@@ -272,8 +274,9 @@ public class UcrSsur {
             System.out.println("El estudiante no fue encontrado");
         }
     }
-    public static void email (File h) throws IOException{
-         Component pare = null;
+
+    public static void email(File h) throws IOException {
+        Component pare = null;
         int returnVal = chooser.showOpenDialog(pare);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             System.out.println("Se subio el registro: "
@@ -281,11 +284,30 @@ public class UcrSsur {
             System.out.println("-------------------------------------------");
         }
         createEmail(chooser.getSelectedFile());
-        
+
     }
 
+    public static void createGroups() {
+        Student[] copy = new Student[listStudents.length];
+        for (int i = 0; i < listStudents.length; i++) {
+            int ramdom = (int) (Math.random() * copy.length);
 
-
-
+            if (listStudents[ramdom].isSelected() == false) {
+                listStudents[ramdom].setSelected(true);
+                copy[i] = listStudents[ramdom];
+                System.out.println(copy[i].getName());
+                
+            }
+        }
+    }
+    public static boolean check(){
+        boolean found=false;
+        for (int i = 0; i < listStudents.length; i++) {
+            if (listStudents[i].isSelected()) {
+                //falta terminar
+            }
+        }
+  return found;
+    }
 
 }

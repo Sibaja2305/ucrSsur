@@ -7,12 +7,14 @@ package ucrssur;
 /**
  * Esta clase contiene los atributos necesario que tiene el registro de los
  * estudiantes de la UCRSSUR(.txt)
+ *
  * @author Kevin Sibaja
  * @author Yordany Navarro Hernandez
  * @author Jonathan Alfaro
  */
 public class Student {
 
+    private boolean selected;
     private String email;
     private String gender;
     private String IdStudent;
@@ -22,12 +24,27 @@ public class Student {
     public Student() {
     }
 
-    public Student(String IdStudent, String name,String gender,String residence, String email) {
+    public Student(String IdStudent, String name, String gender, String residence, String email,boolean selected) {
+        this.selected = selected;
         this.email = email;
         this.gender = gender;
         this.IdStudent = IdStudent;
         this.name = name;
         this.residence = residence;
+    }
+
+    /**
+     * @return the selected
+     */
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * @param selected the selected to set
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**
@@ -102,7 +119,9 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "email=" + email + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
+        return "Student{" + "selected=" + selected + ", email=" + email + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
     }
-  
+    
+    
+
 }
