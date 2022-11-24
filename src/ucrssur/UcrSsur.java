@@ -289,22 +289,27 @@ public class UcrSsur {
 
     public static void createGroups() {
         Student[] copy = new Student[listStudents.length];
-        for (int i = 0; i < listStudents.length; i++) {
+         int i=0;
+       while(check()){
+          
             int ramdom = (int) (Math.random() * copy.length);
-
             if (listStudents[ramdom].isSelected() == false) {
                 listStudents[ramdom].setSelected(true);
+
                 copy[i] = listStudents[ramdom];
-                System.out.println(copy[i].getName());
-                
+               
+                i++;     
             }
+       }
+        for ( i = 0; i < copy.length; i++) {
+             System.out.println(copy[i].getName());
         }
     }
     public static boolean check(){
         boolean found=false;
         for (int i = 0; i < listStudents.length; i++) {
-            if (listStudents[i].isSelected()) {
-                //falta terminar
+            if (listStudents[i].isSelected()==false) {
+                found=true;
             }
         }
   return found;
