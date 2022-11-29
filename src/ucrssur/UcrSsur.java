@@ -274,7 +274,7 @@ public class UcrSsur {
 
     }
 
-    public static void createGroups() {
+    public static void createGroups() throws IOException {
         Student[] copy = new Student[listStudents.length];
         int j = 0;
         while (check()) {
@@ -288,20 +288,37 @@ public class UcrSsur {
                 j++;
             }
         }
-        for (int i = 0; i < copy.length; i++) {
-            System.out.println(copy[i].getName());
+        System.out.println("Digite cuantos grupos desea");
+        int n = Integer.parseInt(br.readLine());
+        int init = 0;
+        int end = copy.length / n;
+        int x = copy.length%n;
+        for (int i = 0; i < n; i++) {
+            System.out.println("Grupo" + (i+1));
+              if ((i+1)==1) {
+                for (int r = copy.length-x; r < copy.length; r++) {
+                    System.out.println(copy[r].getName());
+                }
+            }
+            for (int k = init; k < end; k++) {
+              
+                System.out.println(copy[k].getName());
+            }
+            init += copy.length/n;
+            end += copy.length/n;
+            
         }
     }
 
     public static boolean check() {
-        boolean found=false;
-        for (int i = 0; i < listStudents.length; i++) { 
+        boolean found = false;
+        for (int i = 0; i < listStudents.length; i++) {
             if (listStudents[i].isSelected() == false) {
-                found=true;
+                found = true;
             }
-            
+
         }
-        
+
         return found;
     }
 
