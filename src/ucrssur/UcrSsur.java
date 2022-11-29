@@ -38,6 +38,7 @@ public class UcrSsur {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static Student listStudents[];
     static Student aux[];
+    static String compareCard;
     private static String emailFrom = "kevinsibajah@gmail.com";
     private static String passwordFrom = "ccunjmdfqajcxeyi";
     private static String emailTo;
@@ -47,11 +48,17 @@ public class UcrSsur {
     private static Session session;
     private static MimeMessage mimeMessage;
 
+    /**
+     * este codigo contiene un menu
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         menu(null, null);
     }
 
-    public static void menu(File archivo, File h) throws IOException {
+    public static void menu(File file, File h) throws IOException {
         System.out.println("1= Registrar lista de estudiantes\n2= Leer lista de estudiantes\n"
                 + "3= Editar lista estudiantes\n"
                 + "4= Borrar lista de estudiantes\n5= Crear grupos de la lista de estudiantes  \n"
@@ -65,46 +72,47 @@ public class UcrSsur {
         switch (option) {
             case 1:
                 System.out.println("-------------------------------------------");
-                listRegister(archivo);
+                listRegister(file);
                 System.out.println("-------------------------------------------");
                 break;
             case 2:
                 System.out.println("-------------------------------------------");
-                seeStudent();
+                seeStudent(listStudents, 0);
                 System.out.println("-------------------------------------------");
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 3:
-                editStudent();
+
+                edStudent(listStudents, 0, editStudent());
                 System.out.println("-------------------------------------------");
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
 
                 System.out.println("-------------------------------------------");
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 5:
                 System.out.println("-------------------------------------------");
                 createGroups();
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 6:
                 email(h);
                 System.out.println("-------------------------------------------");
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 7:
                 System.out.println("-------------------------------------------");
                 readUserManual();
                 System.out.println("-------------------------------------------");
-                menu(archivo, null);
+                menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
             case 0:
@@ -116,12 +124,12 @@ public class UcrSsur {
                 break;
             default:
                 System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
-                menu(archivo, null);
+                menu(file, null);
                 break;
         }
     }
 
-    public static void listRegister(File archivo) throws IOException {
+    public static void listRegister(File file) throws IOException {
 
         Component parent = null;
         int returnVal = chooser.showOpenDialog(parent);
@@ -133,10 +141,10 @@ public class UcrSsur {
         showFile(chooser.getSelectedFile());
     }
 
-    public static void showFile(File archivo) throws IOException {
+    public static void showFile(File file) throws IOException {
 
         BufferedReader objReader = null;
-        objReader = new BufferedReader(new FileReader(archivo.getAbsolutePath()));
+        objReader = new BufferedReader(new FileReader(file.getAbsolutePath()));
         String strCurrentLine;
         int i = 0;
         while ((strCurrentLine = objReader.readLine()) != null) {
@@ -145,7 +153,7 @@ public class UcrSsur {
             listStudents = newVector(student, i);
             i++;
         }
-        menu(archivo, null);
+        menu(file, null);
     }
 
     private static Student[] newVector(Student student, int i) {
@@ -161,11 +169,13 @@ public class UcrSsur {
         return listStudend;
     }
 
-    private static void seeStudent() {
+    private static void seeStudent(Student listStudents[], int i) {
 
-        for (int i = 0; i < listStudents.length; i++) {
+        if (i != listStudents.length) {
             System.out.println("Estudiante: " + listStudents[i].getName());
+            seeStudent(listStudents, i + 1);
         }
+
     }
 
     public static void readUserManual() {
@@ -244,35 +254,12 @@ public class UcrSsur {
         }
     }
 
-    public static void editStudent() throws IOException {
+    public static String editStudent() throws IOException {
         boolean found = false;
         System.out.println("-------------------------------------------");
         System.out.println("Carnet del estudiante a editar: ");
-        String CompareCard = br.readLine();
-        for (int i = 0; i < listStudents.length; i++) {
-            if (CompareCard.equals(listStudents[i].getIdStudent())) {
-                found = true;
-                System.out.println("-------------------------------------------");
-                System.out.println("Nuevo carnet: ");
-                listStudents[i].setIdStudent(br.readLine());
-                System.out.println("-------------------------------------------");
-                System.out.println("Nombre: ");
-                listStudents[i].setName(br.readLine());
-                System.out.println("-------------------------------------------");
-                System.out.println("Sexo biologico: ");
-                listStudents[i].setGender(br.readLine());
-                System.out.println("-------------------------------------------");
-                System.out.println("Nuevo lugar de residencia: ");
-                listStudents[i].setResidence(br.readLine());
-                System.out.println("-------------------------------------------");
-                System.out.println("Nuevo correo electronico: ");
-                listStudents[i].setEmail(br.readLine());
-            }
-        }
-        if (!found) {
-            System.out.println("-------------------------------------------");
-            System.out.println("El estudiante no fue encontrado");
-        }
+        String compareCard = br.readLine();
+        return compareCard;
     }
 
     public static void email(File h) throws IOException {
@@ -289,30 +276,65 @@ public class UcrSsur {
 
     public static void createGroups() {
         Student[] copy = new Student[listStudents.length];
-         int i=0;
-       while(check()){
-          
+        int j = 0;
+        while (check()) {
+
             int ramdom = (int) (Math.random() * copy.length);
             if (listStudents[ramdom].isSelected() == false) {
                 listStudents[ramdom].setSelected(true);
 
-                copy[i] = listStudents[ramdom];
-               
-                i++;     
+                copy[j] = listStudents[ramdom];
+
+                j++;
             }
-       }
-        for ( i = 0; i < copy.length; i++) {
-             System.out.println(copy[i].getName());
+        }
+        for (int i = 0; i < copy.length; i++) {
+            System.out.println(copy[i].getName());
         }
     }
-    public static boolean check(){
+
+    public static boolean check() {
         boolean found=false;
-        for (int i = 0; i < listStudents.length; i++) {
-            if (listStudents[i].isSelected()==false) {
+        for (int i = 0; i < listStudents.length; i++) { 
+            if (listStudents[i].isSelected() == false) {
                 found=true;
             }
+            
         }
-  return found;
+        
+        return found;
+    }
+
+    public static void edStudent(Student listStudents[], int i, String compareCard) throws IOException {
+        boolean found = true;
+        if (i != listStudents.length) {
+
+            if (compareCard.equals(listStudents[i].getIdStudent())) {
+                found = true;
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo carnet: ");
+                listStudents[i].setIdStudent(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nombre: ");
+                listStudents[i].setName(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Sexo biologico: ");
+                listStudents[i].setGender(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo lugar de residencia: ");
+                listStudents[i].setResidence(br.readLine());
+                System.out.println("-------------------------------------------");
+                System.out.println("Nuevo correo electronico: ");
+                listStudents[i].setEmail(br.readLine());
+
+            }
+            edStudent(listStudents, i + 1, compareCard);
+
+        }
+        if (!found) {
+            System.out.println("-------------------------------------------");
+            System.out.println("El estudiante no fue encontrado");
+        }
     }
 
 }
