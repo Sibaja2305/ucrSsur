@@ -70,7 +70,7 @@ public class UcrSsur {
     public static void main(String[] args) throws IOException {
         File file = null;
         listRegister(file);
-        
+
     }
 
     /**
@@ -96,7 +96,7 @@ public class UcrSsur {
             option = Integer.parseInt(br.readLine());
         } catch (NumberFormatException numberFormatException) {
             System.out.println("Caracter invalido, por favor utilice solo numericos");
-            menu(file,null);
+            menu(file, null);
         }
 
         switch (option) {
@@ -107,7 +107,9 @@ public class UcrSsur {
                 break;
             case 2:
                 System.out.println("-------------------------------------------");
-                seeStudent(listStudents, 0);
+                
+                seeStudent(alphabetically(), 0);
+                
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
@@ -121,7 +123,7 @@ public class UcrSsur {
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
-             
+
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
@@ -132,13 +134,13 @@ public class UcrSsur {
                 System.out.println("1= Crear por cantidad de grupos\n"
                         + "2= Crear grupos por cantidad de personas\n"
                         + "3= Regresar al menu principal");
-                 int response = 0;
+                int response = 0;
                 try {
                     System.out.println("Seleccione una opcion");
-                     response = Integer.parseInt(br.readLine());
+                    response = Integer.parseInt(br.readLine());
                 } catch (Exception e) {
                     System.out.println("Caracter invalido, por favor utilice solo numericos");
-                    
+
                 }
                 switch (response) {
                     case 1:
@@ -150,6 +152,7 @@ public class UcrSsur {
                     case 2:
                         System.out.println("-------------------------------------------");
                         personGroups(createGroups());
+                        
                         System.out.println("-------------------------------------------");
                         menu(file, null);
                         break;
@@ -263,12 +266,13 @@ public class UcrSsur {
      * @param listStudents
      * @param i
      */
-    private static void seeStudent(Student listStudents[], int i) {
-
-        if (i != listStudents.length) {
-            System.out.println("Estudiante: " + listStudents[i].getName());
-            seeStudent(listStudents, i + 1);
+    private static void seeStudent(Student alphaNames [], int i) {
+        
+        if (i != alphaNames.length) {
+            System.out.println("Estudiante: " + alphaNames[i].toString());
+            seeStudent(alphaNames, i + 1);
         }
+       
 
     }
 
@@ -296,7 +300,8 @@ public class UcrSsur {
      * Este metodo funciona para que la persona pueda mandar la lista de
      * estudiantes en un correo a una persona en especifico y podra un mensaje y
      * el asunto del correo electronico con el archivo.
-     *
+     *Enviar correos desde Java 📧 | Gmail | 2022. (2022, 19 septiembre).
+     * [Vídeo]. YouTube. https://www.youtube.com/watch?v=ZggjlwLzrxg&feature=youtu.be
      * @param h
      * @throws IOException
      */
@@ -467,14 +472,19 @@ public class UcrSsur {
 
                 }
                 write.close();
-                JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : "+ h.getAbsolutePath());
+                JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : " + h.getAbsolutePath());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("-------------------------------------------");
             }
         }
     }
-
+    /**
+     * Este metodo crea grupos de la lista registrada basandose en la cantidad de
+     * estudiantes que se quiere por grupo
+     * @param copy
+     * @throws IOException 
+     */
     public static void personGroups(Student copy[]) throws IOException {
         System.out.println("Digite la cantidad de personas por grupo");
         int n = Integer.parseInt(br.readLine());
@@ -489,40 +499,45 @@ public class UcrSsur {
             try {
                 File h = chooser.getSelectedFile();
                 FileWriter write = new FileWriter(h, true);
-        
-        for (int i = 0; i < copy.length; i++) {
-            copy[i].setSelected(false);
-        }
-        while (checkGroup(copy)) {
-            write.write("Grupo: " + count+"\n");
 
-            if (copy.length >= end) {
-                if (count == 1 && copy.length % n != 0) {
-                    for (int i = copy.length - y; i < copy.length; i++) {
-                        write.write(copy[i].getName()+"\n");
-                        copy[i].setSelected(true);
+                for (int i = 0; i < copy.length; i++) {
+                    copy[i].setSelected(false);
+                }
+                while (checkGroup(copy)) {
+                    write.write("Grupo: " + count + "\n");
+
+                    if (copy.length >= end) {
+                        if (count == 1 && copy.length % n != 0) {
+                            for (int i = copy.length - y; i < copy.length; i++) {
+                                write.write(copy[i].getName() + "\n");
+                                copy[i].setSelected(true);
+                            }
+                        }
+                        for (int j = init; j < end; j++) {
+                            write.write(copy[j].getName() + "\n");
+                            copy[j].setSelected(true);
+                        }
+
                     }
+                    init += n;
+                    end += n;
+                    count++;
                 }
-                for (int j = init; j < end; j++) {
-                    write.write(copy[j].getName()+"\n");
-                    copy[j].setSelected(true);
-                }
-
-            }
-            init += n;
-            end += n;
-            count++;
-        }
-        write.close();
-        JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : "+ h.getAbsolutePath());
-        }catch (Exception e) {
+                write.close();
+                JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : " + h.getAbsolutePath());
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("-------------------------------------------");
             }
         }
 
     }
-
+    /**
+     * Este metodo verifica si los estudiantes guardados en el arreglo copy 
+     * estan asignados a un grupo o no.
+     * @param copy
+     * @return 
+     */
     public static boolean checkGroup(Student copy[]) {
         boolean found = false;
 
@@ -583,7 +598,6 @@ public class UcrSsur {
                 System.out.println("Nuevo lugar de residencia: ");
                 listStudents[i].setResidence(br.readLine());
                 System.out.println("-------------------------------------------");
-                
 
             }
             editStudent(listStudents, i + 1, compareCard);
@@ -592,9 +606,34 @@ public class UcrSsur {
         if (!found) {
             System.out.println("-------------------------------------------");
             System.out.println("El estudiante no fue encontrado");
-            
+
         }
     }
+    /**
+     * Este metodo ordena alfabeticamente la lista de estudiantes que registra el usuario.
+     */
     
+    public static Student [] alphabetically() {
+        Student alphaNames []=new Student [listStudents.length];
+        for (int i = 0; i < alphaNames.length; i++) {
+            alphaNames[i]=listStudents[i];
+        }
+    
+        for (int i = 0; i < alphaNames.length; i++) {
+
+            for (int j = 0; j < alphaNames.length - 1; j++) {
+                String actualElement = alphaNames[j].getName();
+                String nextElement = alphaNames[j + 1].getName();
+                if (actualElement.compareTo(nextElement) > 0) {
+                    // Intercambiar
+                    alphaNames[j].setName(nextElement);
+                    alphaNames[j + 1].setName(actualElement);
+                    
+                     
+                }
+            }
+        }
+        return alphaNames;
+    }
 
 }
