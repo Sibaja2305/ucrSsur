@@ -211,7 +211,7 @@ public class UcrSsur {
         int i = 0;
         while ((strCurrentLine = objReader.readLine()) != null) {
             String datos[] = strCurrentLine.split(",");
-            Student student = new Student(datos[0], datos[1], datos[2], datos[3], datos[4], false);
+            Student student = new Student(datos[0], datos[1], datos[2], datos[3], false);
             listStudents = newVector(student, i);
             i++;
         }
@@ -447,6 +447,7 @@ public class UcrSsur {
 
                 }
                 write.close();
+                JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : "+ h.getAbsolutePath());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("-------------------------------------------");
@@ -461,22 +462,29 @@ public class UcrSsur {
         int end = n;
         int count = 1;
         int y = copy.length / n;
+        Component parent = null;
+        int returnVal = chooser.showSaveDialog(parent);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+            try {
+                File h = chooser.getSelectedFile();
+                FileWriter write = new FileWriter(h, true);
         
         for (int i = 0; i < copy.length; i++) {
             copy[i].setSelected(false);
         }
         while (checkGroup(copy)) {
-            System.out.println("grupo: " + count);
+            write.write("grupo: " + count+"\n");
 
             if (copy.length >= end) {
                 if (count == 1 && copy.length % n != 0) {
                     for (int i = copy.length - y; i < copy.length; i++) {
-                        System.out.println(copy[i].getName());
+                        write.write(copy[i].getName()+"\n");
                         copy[i].setSelected(true);
                     }
                 }
                 for (int j = init; j < end; j++) {
-                    System.out.println(copy[j].getName());
+                    write.write(copy[j].getName()+"\n");
                     copy[j].setSelected(true);
                 }
 
@@ -484,6 +492,13 @@ public class UcrSsur {
             init += n;
             end += n;
             count++;
+        }
+        write.close();
+        JOptionPane.showMessageDialog(null, "Grupo creado en la direccion : "+ h.getAbsolutePath());
+        }catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("-------------------------------------------");
+            }
         }
 
     }
@@ -548,8 +563,7 @@ public class UcrSsur {
                 System.out.println("Nuevo lugar de residencia: ");
                 listStudents[i].setResidence(br.readLine());
                 System.out.println("-------------------------------------------");
-                System.out.println("Nuevo correo electronico: ");
-                listStudents[i].setEmail(br.readLine());
+                
 
             }
             editStudent(listStudents, i + 1, compareCard);

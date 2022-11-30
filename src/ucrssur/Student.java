@@ -15,29 +15,20 @@ package ucrssur;
 public class Student {
 
     private boolean selected;
-    private String email;
+
     private String gender;
     private String IdStudent;
     private String name;
     private String residence;
+
     /**
      * Constructor vacio
      */
     public Student() {
     }
-     /**
-      * Constructor contiene los atributos para guardar los datos de la persona 
-      * el el registro .txt
-      * @param IdStudent
-      * @param name
-      * @param gender
-      * @param residence
-      * @param email
-      * @param selected 
-      */
-    public Student(String IdStudent, String name, String gender, String residence, String email,boolean selected) {
+
+    public Student(String IdStudent, String name, String gender, String residence, boolean selected) {
         this.selected = selected;
-        this.email = email;
         this.gender = gender;
         this.IdStudent = IdStudent;
         this.name = name;
@@ -56,20 +47,6 @@ public class Student {
      */
     public void setSelected(boolean selected) {
         this.selected = selected;
-    }
-
-    /**
-     * @return the email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * @param email the email to set
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /**
@@ -130,9 +107,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "selected=" + selected + ", email=" + email + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
+        return "Student{" + "selected=" + selected + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
     }
-    
-    
 
 }
