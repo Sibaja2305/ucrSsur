@@ -105,7 +105,7 @@ public class UcrSsur {
                 break;
             case 3:
 
-                edStudent(listStudents, 0, editStudent());
+                editStudent(listStudents, 0, searchStudent());
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
@@ -134,7 +134,7 @@ public class UcrSsur {
                         break;
                     case 2:
                         System.out.println("-------------------------------------------");
-
+                        personGroups(createGroups());
                         System.out.println("-------------------------------------------");
                         menu(file, null);
                         break;
@@ -329,11 +329,11 @@ public class UcrSsur {
     }
 
     /**
-     *Crea los protocolos para poder mandar el correo electronico a la persona
+     * Crea los protocolos para poder mandar el correo electronico a la persona
      * designada.
+     *
      * @param h
      */
-
     public static void sendEmail(File h) {
 
         try {
@@ -348,27 +348,29 @@ public class UcrSsur {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    /**
-     * Este metodo pide el numero de carnet y compara en el arreglo y lo encuentra
-     * puede editar al estudiante.
-     * @return
-     * @throws IOException 
-     */
 
-    public static String editStudent() throws IOException {
+    /**
+     * Este metodo pide el numero de carnet y compara en el arreglo y lo
+     * encuentra puede editar al estudiante.
+     *
+     * @return
+     * @throws IOException
+     */
+    public static String searchStudent() throws IOException {
         boolean found = false;
         System.out.println("-------------------------------------------");
         System.out.println("Carnet del estudiante a editar: ");
         String compareCard = br.readLine();
         return compareCard;
     }
-    /**
-     * Este metodo contiene un JFileChooser para que el usuarion pueda 
-     * buscar el archivo que quiere enviar por correo electronico
-     * @param h
-     * @throws IOException 
-     */
 
+    /**
+     * Este metodo contiene un JFileChooser para que el usuarion pueda buscar el
+     * archivo que quiere enviar por correo electronico
+     *
+     * @param h
+     * @throws IOException
+     */
     public static void email(File h) throws IOException {
         Component pare = null;
         int returnVal = chooser.showOpenDialog(pare);
@@ -380,16 +382,18 @@ public class UcrSsur {
         createEmail(chooser.getSelectedFile());
 
     }
+
     /**
      * Este metodo funciona para que los estudiantes queden revueltos y asi
      * crear grupos y se guardada en un arreglo llamado copy
+     *
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
-
     public static Student[] createGroups() throws IOException {
         Student[] copy = new Student[listStudents.length];
         int j = 0;
+
         while (check()) {
 
             int ramdom = (int) (Math.random() * copy.length);
@@ -404,13 +408,14 @@ public class UcrSsur {
         return copy;
 
     }
-    /**
-     * Este metodo funciona para que el usuario digitar cuantos grupos quiere con
-     * la lista de estudiantes.
-     * @param copy
-     * @throws IOException 
-     */
 
+    /**
+     * Este metodo funciona para que el usuario digitar cuantos grupos quiere
+     * con la lista de estudiantes.
+     *
+     * @param copy
+     * @throws IOException
+     */
     public static void groupQuantity(Student copy[]) throws IOException {
 
         System.out.println("Digite cuantos grupos desea");
@@ -448,14 +453,63 @@ public class UcrSsur {
             }
         }
     }
-    /**
-     * Este metodo funciona para saber si el math ramdon pueda escoger los que 
-     * no estan seleccionados y pueda utilizar todos los estudiantes.
-     * @return 
-     */
 
+    public static void personGroups(Student copy[]) throws IOException {
+        System.out.println("Digite la cantidad de personas por grupo");
+        int n = Integer.parseInt(br.readLine());
+        int init = 0;
+        int end = n;
+        int count = 1;
+        int y = copy.length / n;
+        
+        for (int i = 0; i < copy.length; i++) {
+            copy[i].setSelected(false);
+        }
+        while (checkGroup(copy)) {
+            System.out.println("grupo: " + count);
+
+            if (copy.length >= end) {
+                if (count == 1 && copy.length % n != 0) {
+                    for (int i = copy.length - y; i < copy.length; i++) {
+                        System.out.println(copy[i].getName());
+                        copy[i].setSelected(true);
+                    }
+                }
+                for (int j = init; j < end; j++) {
+                    System.out.println(copy[j].getName());
+                    copy[j].setSelected(true);
+                }
+
+            }
+            init += n;
+            end += n;
+            count++;
+        }
+
+    }
+
+    public static boolean checkGroup(Student copy[]) {
+        boolean found = false;
+
+        for (int i = 0; i < copy.length; i++) {
+            if (copy[i].isSelected() == false) {
+                found = true;
+            }
+
+        }
+
+        return found;
+    }
+
+    /**
+     * Este metodo funciona para saber si el math ramdon pueda escoger los que
+     * no estan seleccionados y pueda utilizar todos los estudiantes.
+     *
+     * @return
+     */
     public static boolean check() {
         boolean found = false;
+
         for (int i = 0; i < listStudents.length; i++) {
             if (listStudents[i].isSelected() == false) {
                 found = true;
@@ -465,16 +519,17 @@ public class UcrSsur {
 
         return found;
     }
+
     /**
      * cuando se compara el carnet para editar entra a este metodo y el usuario
      * puede editar algun estudiante de la lista.
+     *
      * @param listStudents
      * @param i
      * @param compareCard
-     * @throws IOException 
+     * @throws IOException
      */
-
-    public static void edStudent(Student listStudents[], int i, String compareCard) throws IOException {
+    public static void editStudent(Student listStudents[], int i, String compareCard) throws IOException {
         boolean found = true;
         if (i != listStudents.length) {
 
@@ -497,7 +552,7 @@ public class UcrSsur {
                 listStudents[i].setEmail(br.readLine());
 
             }
-            edStudent(listStudents, i + 1, compareCard);
+            editStudent(listStudents, i + 1, compareCard);
 
         }
         if (!found) {
