@@ -20,10 +20,21 @@ public class Student {
     private String IdStudent;
     private String name;
     private String residence;
-
+    /**
+     * Constructor vacio
+     */
     public Student() {
     }
-
+     /**
+      * Constructor contiene los atributos para guardar los datos de la persona 
+      * el el registro .txt
+      * @param IdStudent
+      * @param name
+      * @param gender
+      * @param residence
+      * @param email
+      * @param selected 
+      */
     public Student(String IdStudent, String name, String gender, String residence, String email,boolean selected) {
         this.selected = selected;
         this.email = email;
