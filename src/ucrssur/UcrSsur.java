@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -67,7 +68,9 @@ public class UcrSsur {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        menu(null, null);
+        File file = null;
+        listRegister(file);
+        
     }
 
     /**
@@ -86,9 +89,15 @@ public class UcrSsur {
                 + "6= Enviar a correo electronico\n"
                 + "7= Manual usuario \n"
                 + "0= Salir");
-        System.out.println("-------------------------------------------");;
-        System.out.println("Seleccione una opción");
-        int option = Integer.parseInt(br.readLine());
+        int option = 0;
+        try {
+            System.out.println("-------------------------------------------");;
+            System.out.println("Seleccione una opción");
+            option = Integer.parseInt(br.readLine());
+        } catch (NumberFormatException numberFormatException) {
+            System.out.println("Caracter invalido, por favor utilice solo numericos");
+            menu(file,null);
+        }
 
         switch (option) {
             case 1:
@@ -112,7 +121,7 @@ public class UcrSsur {
                 break;
             case 4:
                 System.out.println("-------------------------------------------");
-
+             
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
@@ -123,8 +132,14 @@ public class UcrSsur {
                 System.out.println("1= Crear por cantidad de grupos\n"
                         + "2= Crear grupos por cantidad de personas\n"
                         + "3= Regresar al menu principal");
-                System.out.println("Seleccione una opcion");
-                int response = Integer.parseInt(br.readLine());
+                 int response = 0;
+                try {
+                    System.out.println("Seleccione una opcion");
+                     response = Integer.parseInt(br.readLine());
+                } catch (Exception e) {
+                    System.out.println("Caracter invalido, por favor utilice solo numericos");
+                    
+                }
                 switch (response) {
                     case 1:
                         System.out.println("-------------------------------------------");
@@ -142,12 +157,13 @@ public class UcrSsur {
                         menu(file, null);
                         break;
                     default:
-                        System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
+                        System.out.println("Opcion invalida, por favor digite solamente una de las opciones dadas");
                         System.out.println("-------------------------------------------");
                         menu(file, null);
                         break;
                 }
                 break;
+
             case 6:
                 email(h);
                 System.out.println("-------------------------------------------");
@@ -168,7 +184,7 @@ public class UcrSsur {
 
                 break;
             default:
-                System.out.println("opcion invalida, por favor digite solamente una de las opciones dadas");
+                System.out.println("Opcion invalida, por favor digite solamente una de las opciones dadas");
                 menu(file, null);
                 break;
         }
@@ -215,6 +231,7 @@ public class UcrSsur {
             listStudents = newVector(student, i);
             i++;
         }
+        
         menu(file, null);
     }
 
@@ -270,7 +287,7 @@ public class UcrSsur {
             }
             myReader.close();
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("Hubo un error en la ruta");
             e.printStackTrace();
         }
     }
@@ -285,7 +302,7 @@ public class UcrSsur {
      */
     public static void createEmail(File h) throws IOException {
 
-        System.out.println("email a que quiere enviar");
+        System.out.println("Email a que quiere enviar");
         emailTo = br.readLine();
         System.out.println("Asunto del correo");
         subject = br.readLine();
@@ -341,7 +358,7 @@ public class UcrSsur {
             transport.connect(emailFrom, passwordFrom);
             transport.sendMessage(mimeMessage, mimeMessage.getRecipients(Message.RecipientType.TO));
             transport.close();
-            JOptionPane.showMessageDialog(null, "correo enviado");
+            JOptionPane.showMessageDialog(null, "Correo enviado");
         } catch (NoSuchProviderException ex) {
             Logger.getLogger(UcrSsur.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MessagingException ex) {
@@ -393,6 +410,9 @@ public class UcrSsur {
     public static Student[] createGroups() throws IOException {
         Student[] copy = new Student[listStudents.length];
         int j = 0;
+        for (int i = 0; i < listStudents.length; i++) {
+            listStudents[i].setSelected(false);
+        }
 
         while (check()) {
 
@@ -474,7 +494,7 @@ public class UcrSsur {
             copy[i].setSelected(false);
         }
         while (checkGroup(copy)) {
-            write.write("grupo: " + count+"\n");
+            write.write("Grupo: " + count+"\n");
 
             if (copy.length >= end) {
                 if (count == 1 && copy.length % n != 0) {
@@ -572,7 +592,9 @@ public class UcrSsur {
         if (!found) {
             System.out.println("-------------------------------------------");
             System.out.println("El estudiante no fue encontrado");
+            
         }
     }
+    
 
 }

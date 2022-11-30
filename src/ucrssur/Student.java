@@ -110,4 +110,8 @@ public class Student {
         return "Student{" + "selected=" + selected + ", gender=" + gender + ", IdStudent=" + IdStudent + ", name=" + name + ", residence=" + residence + '}';
     }
 
+    String getName(int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
