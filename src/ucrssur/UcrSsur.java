@@ -68,6 +68,7 @@ public class UcrSsur {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
+        JOptionPane.showMessageDialog(null, "Bienvenido a Groups Create");
         File file = null;
         listRegister(file);
 
@@ -85,9 +86,8 @@ public class UcrSsur {
     public static void menu(File file, File h) throws IOException {
         System.out.println("1= Registrar lista de estudiantes\n2= Leer lista de estudiantes\n"
                 + "3= Editar lista estudiantes\n"
-                + "4= Borrar lista de estudiantes\n5= Crear grupos de la lista de estudiantes  \n"
-                + "6= Enviar a correo electronico\n"
-                + "7= Manual usuario \n"
+                + "4= Crear grupos de la lista de estudiantes\n5= Enviar a correo electronico \n"
+                + "6= Manual usuario \n"
                 + "0= Salir");
         int option = 0;
         try {
@@ -107,9 +107,9 @@ public class UcrSsur {
                 break;
             case 2:
                 System.out.println("-------------------------------------------");
-                
+
                 seeStudent(alphabetically(), 0);
-                
+
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
@@ -122,13 +122,6 @@ public class UcrSsur {
                 System.out.println("-------------------------------------------");
                 break;
             case 4:
-                System.out.println("-------------------------------------------");
-
-                System.out.println("-------------------------------------------");
-                menu(file, null);
-                System.out.println("-------------------------------------------");
-                break;
-            case 5:
                 System.out.println("-------------------------------------------");
 
                 System.out.println("1= Crear por cantidad de grupos\n"
@@ -152,7 +145,7 @@ public class UcrSsur {
                     case 2:
                         System.out.println("-------------------------------------------");
                         personGroups(createGroups());
-                        
+
                         System.out.println("-------------------------------------------");
                         menu(file, null);
                         break;
@@ -166,14 +159,14 @@ public class UcrSsur {
                         break;
                 }
                 break;
-
-            case 6:
+            case 5:
                 email(h);
                 System.out.println("-------------------------------------------");
                 menu(file, null);
                 System.out.println("-------------------------------------------");
                 break;
-            case 7:
+
+            case 6:
                 System.out.println("-------------------------------------------");
                 readUserManual();
                 System.out.println("-------------------------------------------");
@@ -234,7 +227,7 @@ public class UcrSsur {
             listStudents = newVector(student, i);
             i++;
         }
-        
+
         menu(file, null);
     }
 
@@ -266,13 +259,12 @@ public class UcrSsur {
      * @param listStudents
      * @param i
      */
-    private static void seeStudent(Student alphaNames [], int i) {
-        
+    private static void seeStudent(Student alphaNames[], int i) {
+
         if (i != alphaNames.length) {
-            System.out.println("Estudiante: " + alphaNames[i].toString());
+            System.out.println("Estudiante: " + alphaNames[i].getName());
             seeStudent(alphaNames, i + 1);
         }
-       
 
     }
 
@@ -299,9 +291,10 @@ public class UcrSsur {
     /**
      * Este metodo funciona para que la persona pueda mandar la lista de
      * estudiantes en un correo a una persona en especifico y podra un mensaje y
-     * el asunto del correo electronico con el archivo.
-     *Enviar correos desde Java 📧 | Gmail | 2022. (2022, 19 septiembre).
-     * [Vídeo]. YouTube. https://www.youtube.com/watch?v=ZggjlwLzrxg&feature=youtu.be
+     * el asunto del correo electronico con el archivo. Enviar correos desde
+     * Java 📧 | Gmail | 2022. (2022, 19 septiembre). [Vídeo]. YouTube.
+     * https://www.youtube.com/watch?v=ZggjlwLzrxg&feature=youtu.be
+     *
      * @param h
      * @throws IOException
      */
@@ -479,11 +472,13 @@ public class UcrSsur {
             }
         }
     }
+
     /**
-     * Este metodo crea grupos de la lista registrada basandose en la cantidad de
-     * estudiantes que se quiere por grupo
+     * Este metodo crea grupos de la lista registrada basandose en la cantidad
+     * de estudiantes que se quiere por grupo
+     *
      * @param copy
-     * @throws IOException 
+     * @throws IOException
      */
     public static void personGroups(Student copy[]) throws IOException {
         System.out.println("Digite la cantidad de personas por grupo");
@@ -532,11 +527,13 @@ public class UcrSsur {
         }
 
     }
+
     /**
-     * Este metodo verifica si los estudiantes guardados en el arreglo copy 
+     * Este metodo verifica si los estudiantes guardados en el arreglo copy
      * estan asignados a un grupo o no.
+     *
      * @param copy
-     * @return 
+     * @return
      */
     public static boolean checkGroup(Student copy[]) {
         boolean found = false;
@@ -609,16 +606,18 @@ public class UcrSsur {
 
         }
     }
+
     /**
-     * Este metodo ordena alfabeticamente la lista de estudiantes que registra el usuario.
+     * Este metodo ordena alfabeticamente la lista de estudiantes que registra
+     * el usuario.
      */
-    
-    public static Student [] alphabetically() {
-        Student alphaNames []=new Student [listStudents.length];
+
+    public static Student[] alphabetically() {
+        Student alphaNames[] = new Student[listStudents.length];
         for (int i = 0; i < alphaNames.length; i++) {
-            alphaNames[i]=listStudents[i];
+            alphaNames[i] = listStudents[i];
         }
-    
+
         for (int i = 0; i < alphaNames.length; i++) {
 
             for (int j = 0; j < alphaNames.length - 1; j++) {
@@ -628,8 +627,7 @@ public class UcrSsur {
                     // Intercambiar
                     alphaNames[j].setName(nextElement);
                     alphaNames[j + 1].setName(actualElement);
-                    
-                     
+
                 }
             }
         }

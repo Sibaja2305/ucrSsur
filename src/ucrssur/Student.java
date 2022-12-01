@@ -26,6 +26,15 @@ public class Student {
      */
     public Student() {
     }
+    /**
+     * Contructor contiene los atributos para guardar los datos de la lista
+     * de estudiantes en un arreglo y poder utilizarlos mas facil
+     * @param IdStudent
+     * @param name
+     * @param gender
+     * @param residence
+     * @param selected 
+     */
 
     public Student(String IdStudent, String name, String gender, String residence, boolean selected) {
         this.selected = selected;
