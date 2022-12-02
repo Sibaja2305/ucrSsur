@@ -619,14 +619,15 @@ public class UcrSsur {
         }
 
         for (int i = 0; i < alphaNames.length; i++) {
-
+           Student s;
             for (int j = 0; j < alphaNames.length - 1; j++) {
                 String actualElement = alphaNames[j].getName();
                 String nextElement = alphaNames[j + 1].getName();
                 if (actualElement.compareTo(nextElement) > 0) {
                     // Intercambiar
-                    alphaNames[j].setName(nextElement);
-                    alphaNames[j + 1].setName(actualElement);
+                    s = alphaNames[j];
+                    alphaNames[j]=alphaNames[j + 1];
+                    alphaNames[j + 1]= s;
 
                 }
             }
