@@ -306,7 +306,7 @@ public class UcrSsur {
         subject = br.readLine();
         System.out.println("Mensaje");
         content = br.readLine();
-        System.out.println("Espere un momento...");
+        JOptionPane.showMessageDialog(null, "espere un momento....");
 
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
@@ -611,7 +611,6 @@ public class UcrSsur {
      * Este metodo ordena alfabeticamente la lista de estudiantes que registra
      * el usuario.
      */
-
     public static Student[] alphabetically() {
         Student alphaNames[] = new Student[listStudents.length];
         for (int i = 0; i < alphaNames.length; i++) {
